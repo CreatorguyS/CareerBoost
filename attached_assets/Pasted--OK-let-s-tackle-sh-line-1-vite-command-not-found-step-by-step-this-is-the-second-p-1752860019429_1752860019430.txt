@@ -1,0 +1,118 @@
+✅ OK — let’s tackle **`sh: line 1: vite: command not found`** step by step —
+this is the **second part** of your issue.
+
+---
+
+### ⚙️ **Why this happens**
+
+This error means:
+
+* Vercel runs `npm run build` **inside the `Root Directory`** you set (which must be `client`).
+* But **Vite** (`vite`) is not installed **inside the `client` folder’s `node_modules`**.
+
+Right now your **`package.json`** is at the root.
+So Vercel needs to install `vite` **in the same place** where it runs `npm run build`.
+
+If your **source code is in `client/`**, but your **`package.json`** is in the root:
+
+* Either move `package.json` **into `client/`**
+* **OR** change your project structure so `index.html` is at the root too.
+
+---
+
+### ✅ ✅ **How to fix cleanly**
+
+#### ✅ **Option 1 — Move `package.json` inside `client/`**
+
+1️⃣ Move `package.json`, `package-lock.json` (or `yarn.lock`) into `client/`.
+
+2️⃣ In `client/`, run:
+
+```bash
+npm install
+```
+
+3️⃣ Add a `vite.config.ts` inside `client/` if you haven’t yet:
+
+```ts
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+
+export default defineConfig({
+  plugins: [react()],
+})
+```
+
+4️⃣ Update Vercel **Root Directory: `client`**
+
+---
+
+#### ✅ **Option 2 — Keep `package.json` at root, fix project**
+
+If you want to keep `package.json` at root:
+
+* Move `index.html` into `public/` or the root.
+
+* Update `vite.config.ts` at root:
+
+  ```ts
+  import { defineConfig } from 'vite'
+  import react from '@vitejs/plugin-react'
+  import { resolve } from 'path'
+
+  export default defineConfig({
+    plugins: [react()],
+    root: './', // means Vite expects index.html at root
+    build: {
+      outDir: 'dist'
+    }
+  })
+  ```
+
+* Fix your `<script>` in `index.html`:
+
+  ```html
+  <script type="module" src="/src/main.tsx"></script>
+  ```
+
+* Keep Vercel **Root Directory = `./`**
+
+---
+
+✅ **Best practice:** If this is a React + Express **monorepo**, it’s normal to have:
+
+```
+root/
+ ├─ client/
+ │   ├─ src/
+ │   ├─ index.html
+ │   ├─ vite.config.ts
+ │   ├─ package.json ← for frontend
+ ├─ server/
+ │   ├─ index.ts
+ ├─ package.json ← for backend
+```
+
+Then you’d have **two `package.json` files**:
+
+* `client/package.json` → for Vite + React
+* `root/package.json` → for Express + server
+
+✅ In Vercel:
+
+* **Frontend project:** Root Directory = `client`
+* **Backend project:** Use Vercel functions or a separate server deploy.
+
+---
+
+## ✅ ✅ **What to do now**
+
+👉 **Pick one option**:
+
+* **Move `package.json` to `client/` → easy**
+* Or restructure your files
+
+**This will 100% fix `vite: command not found`**!
+
+If you want, paste your **folder structure goal**,
+and I’ll help you pick the cleanest setup **step-by-step**. 🚀

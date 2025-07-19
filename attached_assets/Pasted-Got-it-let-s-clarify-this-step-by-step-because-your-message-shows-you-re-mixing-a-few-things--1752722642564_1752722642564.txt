@@ -1,0 +1,133 @@
+Got it — let’s clarify this step by step, because your message shows you’re mixing a few things:
+
+🔴 **Key point:**
+You said **“I have built a Replit app and imported it, but preview is not working every time.”**
+
+This usually means **your app is not serving correctly** or **your Replit run configuration is wrong**.
+Let’s fix that.
+
+---
+
+## ✅ **Check this first**
+
+### 1️⃣ **What stack are you using?**
+
+* Is it **Node.js / Express**?
+* Or is it **React / Vite**?
+* Or **Python Flask**?
+
+Different stacks have different `run` commands.
+
+---
+
+### 2️⃣ **How are you running it?**
+
+**Look at your `.replit` file** — it should have:
+
+```toml
+run = "npm start"
+```
+
+or
+
+```toml
+run = "node index.js"
+```
+
+or for React:
+
+```toml
+run = "npm run dev"
+```
+
+---
+
+### 3️⃣ **What port are you using?**
+
+In Replit:
+
+* **Always listen on `process.env.PORT`**, not a hardcoded port.
+
+Example:
+
+```js
+const port = process.env.PORT || 3000;
+app.listen(port, () => console.log(`Server running on ${port}`));
+```
+
+If you hardcode `3000`, Replit might fail.
+
+---
+
+### 4️⃣ **How are you previewing?**
+
+✅ **Correct:**
+
+* Click **"Run"** → then click **"Open in new tab"** or the preview pane.
+
+❌ **Wrong:**
+
+* Just opening `index.html` directly doesn’t work if you have a server.
+
+---
+
+### 5️⃣ **Possible causes why preview breaks:**
+
+* **Server not running:** You stopped it manually or it crashed.
+* **Wrong port:** Not using `process.env.PORT`.
+* **Wrong run command:** `.replit` file has wrong `run` line.
+* **No route defined for `/` or `/pro`.**
+
+---
+
+## 🚑 **How to fix in 3 steps**
+
+**✅ Fix your server:**
+
+```js
+// server.js
+const express = require('express');
+const app = express();
+
+app.use(express.static('public')); // if you have static files
+
+app.get('/pro', (req, res) => {
+  res.send('Pro Dashboard working!');
+});
+
+const port = process.env.PORT || 3000;
+app.listen(port, () => console.log(`Server running on port ${port}`));
+```
+
+**✅ Fix `.replit`:**
+
+```toml
+run = "node server.js"
+```
+
+**✅ Run it properly:**
+Click **Run** → wait → click **Open in new tab**.
+
+---
+
+## ✅ **If you are using React / Vite**
+
+* Use: `npm run dev`
+* Check: `vite.config.js` → no weird proxy or port setting.
+* Make sure you’re opening the **generated server**, not the HTML file.
+
+---
+
+## 📣 **If you still have the same problem**
+
+Please tell me:
+
+* The **exact stack** (Node? React? Flask?)
+* Your **`.replit`** file contents
+* The **main server file code**
+* The **exact error** you see (screenshot or copy)
+
+---
+
+I promise:
+Share this info and I’ll help you **fix the preview permanently** — no more random breaks. 🚀

@@ -1,0 +1,101 @@
+Maximize token efficiency
+Optimize token usage to keep your costs down
+
+​
+Understand tokens
+Bolt inference uses Anthropic’s Claude Sonnet 4 AI model. We purchase tokens from Anthropic, defined by them as:
+The smallest individual units of a language model, and can correspond to words, subwords, characters, or even bytes (in the case of Unicode).
+When you interact with Bolt, tokens are consumed in three primary ways:
+Chat messages between you and the LLM
+The LLM writing code
+The LLM reading the existing code to capture any changes you made
+​
+How Bolt reduces token usage
+Bolt’s goal is to use as few tokens as possible to accomplish each task. The team is hard at work continuing to ship product changes that increase token efficiency.
+​
+How you can reduce token usage
+Following these tips can substantially reduce your token usage.
+​
+Use Discussion Mode
+In Build Mode, Bolt updates your code at each stage of your conversation, which uses up tokens. To avoid unnecessary code changes, use Discussion Mode when you want to get help, troubleshoot, or discuss plans, but don’t want to implement anything immediately. Discussion Mode uses approximately 90% fewer tokens than Build Mode.
+​
+Use diff-based editing
+Bolt uses diff-based editing to identify the related parts of the code and make isolated updates.
+Diff-based editing significantly increases:
+Token efficiency: Bolt works smarter, not harder. Reading and writing less saves tokens.
+Speed: Focused operations take less time.
+Precision: Bolt makes precise changes without disturbing the surrounding code.
+​
+Avoid repeated automated error fix attempts
+When an error occurs in your project, Bolt automatically attempts to fix it once. Repeatedly clicking the Attempt fix button can lead to unnecessary token consumption. After each attempt, review the result and refine your next request if needed. There are programming challenges that the AI cannot solve automatically, so it is a good idea to do some research and intervene manually if it fails to fix automatically.
+​
+Add error handling to your project
+If you find yourself stuck in an error loop, a useful strategy is to prompt the AI to enhance error handling and implement detailed logging throughout the problematic area. The AI excels at inserting robust error logs, even at a granular level, such as between functions or key steps. These logs provide valuable feedback that the AI can use to better understand the root cause of the issue. The additional logging provides more precise information when the error occurs again. With this detailed feedback, the AI can make more accurate adjustments to fix the issue.
+​
+Use the revert feature
+Use the revert feature to revert your project to a previous state without consuming tokens. This is similar to an undo button that can take you back to any prior state of your project. This can save time and tokens if something goes wrong with your project. Keep in mind that there is no redo function though. Be sure you want to revert before using this feature because it is final: Bolt permanently removes all changes made after the point you reverted to.
+​
+Add functionality incrementally
+Make sure the basics of your app are scaffolded before describing the details of more advanced functionality for your site.
+Add one piece of new functionality at a time.
+​
+Use specific and focused prompts
+When prompting the AI, be clear and specific. See Prompting effectively for more information. Tell the model to focus on specific files or functions rather than the entire codebase.
+​
+Reduce the size of your project
+As your project grows, more tokens are required to keep the AI in sync with your code. Larger projects (and longer chat conversations) demand more resources for the AI to stay aware of the context, so it’s important to be mindful of how project size impacts token usage.
+​
+Clean up unused files
+Bolt uses a tool called Knip to perform the cleanup. You can run this when prompted by Bolt, or run it manually at any time.
+Before proceeding, back up your project using both of these methods:
+From the left-side panel, select your project. Then, click Export > Download located at the center top of the page.Export Project New Pn
+Now, from the drop-down, click Duplicate to create a fresh copy of your project in Bolt.
+Automatic cleanup when prompted:
+If your Bolt project exceeds the context window (200k tokens for free accounts, 500k for paid accounts), Bolt notifies you in the chat, saying Project size exceeded. Click Remove unused files to run the cleanup.
+Manually run the cleanup:
+In the Bolt terminal run the following command:
+npx knip --production --fix --allow-remove-files
+Check the output in the terminal to see if the command ran successfully. This command removes unnecessary files from the codebase, which reduces the project size.
+Open the Bolt terminal
+
+​
+Use the .bolt/ignore file
+In the .bolt/ignore file, list any files or folders that Bolt should exclude from the AI context window.
+In your Bolt project, switch to Code view to view your files list.
+Log in to your StackBlitz account.
+Either:
+In the .bolt directory, click ignore to open the file in the editor.
+If there isn’t an ignore file, right-click the .bolt directory, then click New File…. Name the file ignore.
+List the files you want Bolt to ignore. Provide the full path to the files, including directories. You can use * as a wildcard. For example: to ignore all files in a directory called test, write test/* in your ignore file. These files are now completely invisible to the AI, which frees up space in the context window.
+"Screenshot of the Bolt UI showing an ignore file"
+Hiding files from the AI can have unintended consequences, as the AI is no longer aware of your entire project. This approach is powerful, but is only recommended for advanced users who can make informed decisions about what can safely be excluded, and can understand and resolve issues that may arise from this approach.
+​
+Split the project
+Break a large app into smaller chunks, and glue it all back together outside of Bolt later. For example, separating the backend and frontend into different projects is a common developer pattern. Be careful doing this if you don’t have experience as a developer.
+​
+Reset the AI context window
+Resetting the AI context window (clearing the conversation history) reduces the amount of information (context) being sent to the AI.
+Get the AI to summarize your chat history:
+Switch to Discussion Mode: in the Bolt prompt box in your project, click Toggle Chat icons used as button to toggle between build mode and discussion mode
+Prompt the AI: Please generate a short summary of our conversation so far.
+Check that the AI response is accurate and contains everything you need.
+Copy the response out of Bolt and save it as a .txt or .md file.
+Then, reset the context window:
+Open the menu Menu icon next to the project name.
+Click Duplicate.
+If you have integrations active in the project, Bolt displays a dialog that confirms which integration settings it will copy. Click Duplicate in the dialog to continue.
+Bolt creates a new copy of the project, with an empty chat history.
+In your new project, add the chat summary:
+Switch to Discussion Mode: in the Bolt prompt box in your project, click Toggle Chat icons used as button to toggle between build mode and discussion mode
+Click Upload files Upload file icon
+Provide a prompt such as:
+
+Copy
+
+Ask AI
+The attached file is a summary of previous discussion about this project.
+Please use it when working on future changes.
+Press Enter to upload the file and your prompt.
+Was this page helpful?
+
+

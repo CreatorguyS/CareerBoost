@@ -1,0 +1,61 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Start Development Server",
+      "type": "shell",
+      "command": "npm",
+      "args": ["run", "dev"],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": ["$tsc"],
+      "runOptions": {
+        "runOn": "default"
+      }
+    },
+    {
+      "label": "Build for Production",
+      "type": "shell",
+      "command": "npm",
+      "args": ["run", "build"],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": ["$tsc"]
+    },
+    {
+      "label": "Start Windows (Cross-platform)",
+      "type": "shell",
+      "command": "node",
+      "args": ["local-dev.js"],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "windows": {
+        "command": "local-dev.bat"
+      },
+      "linux": {
+        "command": "./local-dev.sh"
+      },
+      "osx": {
+        "command": "./local-dev.sh"
+      }
+    }
+  ]
+}
